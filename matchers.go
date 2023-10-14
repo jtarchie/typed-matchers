@@ -13,3 +13,11 @@ func Equal[T any](value T) *matchers.EqualMatcher[T] {
 		Expected: value,
 	}
 }
+
+func BeADirectory() *matchers.BeADirectoryMatcher {
+	return &matchers.BeADirectoryMatcher{}
+}
+
+func HaveOccurred() *matchers.HaveOccurredMatcher {
+	return &matchers.HaveOccurredMatcher{}
+}

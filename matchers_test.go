@@ -2,6 +2,7 @@ package typedassert_test
 
 import (
 	"errors"
+	"os"
 	"testing"
 
 	. "github.com/jtarchie/typedassert"
@@ -20,8 +21,6 @@ func TestEquals(t *testing.T) {
 	Expect(5).Should(Equal(5))
 	Expect(5.0).Should(Equal(5.0))
 
-	Expect(5).ShouldNot(Equal("5"))
-	Expect(5).ShouldNot(Equal(5.0))
 	Expect(5).ShouldNot(Equal(3))
 
 	Expect("5").Should(Equal("5"))
@@ -39,4 +38,14 @@ func TestEquals(t *testing.T) {
 	Expect(myCustomType{s: "foo", n: 3, f: 2.0, arr: []string{"a", "b"}}).ShouldNot(Equal(myCustomType{s: "foo", n: 2, f: 2.0, arr: []string{"a", "b"}}))
 	Expect(myCustomType{s: "foo", n: 3, f: 2.0, arr: []string{"a", "b"}}).ShouldNot(Equal(myCustomType{s: "foo", n: 3, f: 3.0, arr: []string{"a", "b"}}))
 	Expect(myCustomType{s: "foo", n: 3, f: 2.0, arr: []string{"a", "b"}}).ShouldNot(Equal(myCustomType{s: "foo", n: 3, f: 2.0, arr: []string{"a", "b", "c"}}))
+}
+
+func TestBeADirectory(t *testing.T) {
+	Expect("/dne/test").NotTo(BeADirectory())
+	Expect(".").To(BeADirectory())
+
+	tmpFile, err := os.CreateTemp("", "gomega-test-tempfile")
+	Expect(err).ShouldNot(HaveOccurred())
+	defer os.Remove(tmpFile.Name())
+	Expect(tmpFile.Name()).ShouldNot(BeADirectory())
 }
